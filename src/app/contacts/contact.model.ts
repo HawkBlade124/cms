@@ -2,11 +2,11 @@ export class Contacts{
     public contactId: number;
     public name: string;
     public email: string;
-    public phone: number;
+    public phone: string;
     public imageUrl: string;
     public group: string;
 
-    constructor(Id: number,  name: string, email: string, phone:number, imageUrl: string, group:string){
+    constructor(Id: number,  name: string, email: string, phone:string, imageUrl: string, group:string){
         this.contactId = Id;
         this.name = name;
         this.email = email;
