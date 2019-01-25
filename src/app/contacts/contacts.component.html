@@ -5,25 +5,19 @@
           <div class="panel-body">
             <div class="row">
               <div class="col-xs-12">
-                  <a href="#" class="list-group-item clearfix" *ngFor="let contact of contacts">
-                    <div class="pull-left">
-                      <h4 class="list-group-item-heading">{{contact.name}}</h4>
-
-                    </div>
-                    <span class="pull-right">
-                        <img
-                        [src]="contact.imageUrl"
-                        alt="{{contact.name}}"
-                        class="img-responsive"
-                        style="max-height:50px">
-                      </span>
-                  </a>
+                <cms-contact-list
+                (selectedContactEvent)="selectedContact = $event">
+              </cms-contact-list>
               </div>
             </div>
           </div>
         </div>
   </div>
   <div class="col-md-3">
-   <cms-contacts-detail></cms-contacts-detail>
+    <cms-contacts-detail *ngIf="selectedContact; else infoText"
+    [contact]="selectedContact"></cms-contacts-detail>
+    <ng-template #infoText>
+     <p>Please select a contact!</p>
+   </ng-template>
   </div>
 </div>

@@ -1,2 +1,5 @@
-<div class="row">
-.
+<cms-contact-item
+*ngFor="let contactEl of contacts"
+[contact]="contactEl"
+(contactSelected)="onSelected(contactEl)"
+></cms-contact-item>
