@@ -1,21 +1,25 @@
 import { Component, OnInit, Output,EventEmitter } from '@angular/core';
 import { Message } from '../message.model';
+import { MessagesService } from '../messages.service';
+import { ContactService } from 'src/app/contacts/contact.service';
 @Component({
   selector: 'cms-message-list',
   templateUrl: './message-list.component.html',
-  styleUrls: ['./message-list.component.css']
+  styleUrls: ['./message-list.component.css'],
+  providers: [ContactService]
 })
 export class MessageListComponent implements OnInit {
-  @Output() addMessageEvent = new EventEmitter<Message>();
-  messages: Message[] =[
-    new Message(1, 'Help', 'I need help on this assignment, can you provide that?', 'Ben Fuller'),
-    new Message(2, 'Help', 'Of Course, what can I help you with?', 'Bro. Barzee'),
-    new Message(3, 'Help', 'Thank you', 'Ben Fuller')
-  ];
+  messages: Message[] =[];
 
-  constructor() { }
+  constructor(private messageService: MessagesService) { }
 
   ngOnInit() {
+    this.messages = this.messageService.getMessages();
+    this.messageService.messageChangeEvent.subscribe(
+      (messages: Message[]) => {
+        this.messages = messages;
+      }
+      );
   }
   onAddMessage(message: Message){
     this.messages.push(message);
