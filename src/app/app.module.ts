@@ -41,7 +41,7 @@ import { ContactService } from './contacts/contact.service';
   imports: [
     BrowserModule,
   ],
-  providers: [MessagesService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {
