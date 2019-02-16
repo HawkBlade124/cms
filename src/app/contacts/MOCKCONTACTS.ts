@@ -283,8 +283,9 @@ export const MOCKCONTACTS: Contact[] = [
       phone: '208-496-3774',
       imageUrl: '../../assets/images/rigbys.jpg',
       group: null
-    }    
+    }
   ]
-  
-  }
+
+  },
+
 ];

@@ -5,18 +5,13 @@
           <div class="panel-body">
             <div class="row">
               <div class="col-xs-12">
-                <cms-contact-list>
-              </cms-contact-list>
+                <cms-contact-list></cms-contact-list>
               </div>
             </div>
           </div>
         </div>
   </div>
   <div class="col-md-3">
-    <cms-contacts-detail *ngIf="selectedContact; else infoText"
-    [contact]="selectedContact"></cms-contacts-detail>
-    <ng-template #infoText>
-     <p>Please select a contact!</p>
-   </ng-template>
+<router-outlet></router-outlet>
   </div>
 </div>

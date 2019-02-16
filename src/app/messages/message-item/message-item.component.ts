@@ -18,7 +18,6 @@ canEdit: boolean= false;
 
   ngOnInit() {
     let contact: Contact = this.contactService.getContact(this.message.sender);
-    console.log(this.message);
     this.messageSender = contact.name;
   }
 

@@ -26,4 +26,8 @@ export class ContactService {
     }
     return null;
    }
+
+   deleteContact(contact: Contact){
+
+   }
 }
