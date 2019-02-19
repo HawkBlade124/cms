@@ -8,7 +8,7 @@ import { Document } from './document.model';
 
 export class DocumentsService {
   documentSelectedEvent = new EventEmitter<Document>();
-  documentChangedEvent = new EventEmitter<Document>();
+  documentChangedEvent = new EventEmitter<Document[]>();
 
   documents: Document[] = [];
 
@@ -34,6 +34,6 @@ export class DocumentsService {
     }
 
     this.documents.splice(pos, 1);
-    this.documentChangedEvent.emit();
+    this.documentChangedEvent.emit(this.documents.slice());
   }
 }
