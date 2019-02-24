@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-
+import { Subject } from 'rxjs/Subject';
+import { DocumentsService } from '../documents.service'
 @Component({
   selector: 'cms-document-edit',
   templateUrl: './document-edit.component.html',
   styleUrls: ['./document-edit.component.css']
 })
 export class DocumentEditComponent implements OnInit {
+  
   id: number;
   editMode = false;
 
