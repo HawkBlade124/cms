@@ -1,7 +1,11 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 import { Document } from './document.model';
+<<<<<<< HEAD
 import { Subject } from 'rxjs';
+=======
+import { Subject } from 'rxjs/Subject';
+>>>>>>> f837bd5cde805c7cfbafd1bbb634447d8128393b
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +14,13 @@ import { Subject } from 'rxjs';
 export class DocumentsService {
   documentSelectedEvent = new EventEmitter<Document>();
   documentListChangedEvent = new Subject<Document[]>();
+<<<<<<< HEAD
   documentsChanged = new Subject<Document[]>();
   startedEditing = new Subject<string>();
   maxDocumentId: number;
+=======
+
+>>>>>>> f837bd5cde805c7cfbafd1bbb634447d8128393b
   documents: Document[] = [];
 
 
