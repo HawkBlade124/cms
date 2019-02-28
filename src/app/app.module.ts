@@ -22,7 +22,11 @@ import { DocumentEditComponent } from './documents/document-edit/document-edit.c
 import { WindRefService } from './wind-ref.service';
 import { ContactEditComponent } from './contacts/contact-edit/contact-edit.component';
 import { ContactViewComponent } from './contacts/contact-view/contact-view.component';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DndModule } from 'node_modules/ng2-dnd';
+import { MessagesService } from './messages/messages.service';
+import { DocumentsService } from './documents/documents.service';
+import { ContactService } from './contacts/contact.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,12 +48,16 @@ import { ContactViewComponent } from './contacts/contact-view/contact-view.compo
     DocumentEditComponent,
     ContactEditComponent,
     ContactViewComponent,
+
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    DndModule.forRoot()
   ],
-  providers: [WindRefService],
+  providers: [MessagesService, DocumentsService, ContactService, WindRefService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
