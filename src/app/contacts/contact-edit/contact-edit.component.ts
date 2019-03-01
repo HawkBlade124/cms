@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ContactService } from '../contact.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Contact } from '../contact.model';
+import { NgForm } from '@angular/forms';
 
 
 @Component({
@@ -10,19 +11,63 @@ import { Contact } from '../contact.model';
   styleUrls: ['./contact-edit.component.css']
 })
 export class ContactEditComponent implements OnInit {
-  contact: Contact = null;
+  @ViewChild('f') clForm: NgForm;
+  id: string;
+  originalContact: Contact;
+  contact: Contact;
   groupContacts: Contact[] =[];
-  editMode:boolean = false;
+  editMode = false;
+
   hasGroup: boolean = false;
   invalidGroupContact:boolean;
+
   constructor(private contactService: ContactService,
               private router: Router,
               private route: ActivatedRoute,) {}
 
   ngOnInit() {
+    this.route.params
+      .subscribe(
+        (params: Params) => {
+          this.id = params['id'];
+          // this.editMode = params['id'] != null;
+          if (!this.id){
+            this.editMode = false;
+            return;
+          }
 
+          this.originalContact = this.contactService.getContact(this.id);
+
+          if(!this.originalContact){
+           return;
+          }
+
+          this.editMode = true;
+
+          this.contact = JSON.parse(JSON.stringify(this.originalContact));
+
+
+  });
   }
 
+  onSubmit(form:NgForm){
+    const values = form.value;
+    const newContact = new Contact(values.id, values.name, values.email,values.phone, values.imageUrl, values.group);
+    if (this.editMode = true){
+      this.contactService.updateContact(this.originalContact, newContact);
+    }
+    else{
+      ContactService.addContact(newDocument);
+    }
+    this.editMode = false;
+    form.reset();
+    this.onCancel();
+    this.router.navigate['/contacts'];
+  }
+
+  onCancel(){
+    this.router.navigate(['/contacts']);
+  }
   isInvalidContact(newContact: Contact){
     if(!newContact){
       return true;

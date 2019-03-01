@@ -48,7 +48,7 @@ import { ContactService } from './contacts/contact.service';
     DocumentEditComponent,
     ContactEditComponent,
     ContactViewComponent,
-
+    ContactListComponent
   ],
   imports: [
     BrowserModule,
