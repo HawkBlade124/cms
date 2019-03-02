@@ -13,9 +13,10 @@ export class DocumentsService {
   documentSelectedEvent = new EventEmitter<Document>();
   documentListChangedEvent = new Subject<Document[]>();
   documentsChanged = new Subject<Document[]>();
+
   maxDocumentId: number;
   documents: Document[] = [];
-  id: number;
+  id: string;
 
   constructor() {
     this.documents = MOCKDOCUMENTS;
@@ -71,10 +72,17 @@ export class DocumentsService {
 
   }
 
-  addDocument(documents: Document[]) {
+  addDocument(newDocument: Document, documentsListClone: Document) {
 
 
-    this.documents.push(...documents);
-    this.documentsChanged.next(this.documents.slice());
+    if(!newDocument){
+      return;
+    }
+    this.maxDocumentId++;
+    // this.addDocument.id = this.maxDocumentId;
+    this.documents.push(...this.documents);
+    documentsListClone[this.id] = this.documents.slice();
+    this.documentListChangedEvent.next(documentsListClone[this.id])
+
   }
 }

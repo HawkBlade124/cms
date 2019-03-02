@@ -15,7 +15,7 @@ export class DocumentEditComponent implements OnInit {
   originalDocument: Document;
   document: Document;
   editMode = false;
-  addDocument: Document;
+  addDocument: DocumentsService;
   editedDocument: Document;
   constructor(private documentService: DocumentsService,
               private router: Router,
@@ -47,10 +47,10 @@ export class DocumentEditComponent implements OnInit {
   onSubmit(form:NgForm){
     const values = form.value;
     const newDocument = new Document(values.id, values.name, values.description, values.url);
-    if (this.editMode = true){
+    if (this.editMode === true){
       this.documentService.updateDocument(this.originalDocument, newDocument);
     }else{
-      DocumentsService.addDocument(newDocument);
+      this.documentService.addDocument([newDocument]);
     }
     this.editMode = false;
     form.reset();
@@ -61,7 +61,4 @@ export class DocumentEditComponent implements OnInit {
   onCancel(){
     this.router.navigate(['/documents']);
   }
-
-
-
 }
