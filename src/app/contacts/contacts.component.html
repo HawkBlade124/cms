@@ -1,7 +1,24 @@
 <div class="row">
   <div class="col-xs-5">
       <div class="panel panel-default">
-          <div class="panel-heading" style='font-size:20px;'>Contacts <div class="btn btn-success pull-right" routerLink="new" >New Contact</div></div>
+
+        <div class="panel-heading">
+          <div class="row">
+            <span class="title pad-left-right">Contacts</span>
+          </div>
+          <div class="row">
+            <div class="input-group pull-left pad-left-right col-xs-7">
+
+              <input type="text" #searchBox ng-keyup="onKeyPress(searchBox.value)" class="form-control">
+
+              <div class="glyphicon glyphicon glyphicon-search input-group-addon" (click)="search(searchBox.value)"></div>
+            </div>
+            <div class="pull-right pad-left-right">
+              <a class="btn btn-success" [routerLink]="['new']">New Contact</a>
+            </div>
+          </div>
+        </div>
+
           <div class="panel-body">
             <div class="row">
               <div class="col-xs-12">

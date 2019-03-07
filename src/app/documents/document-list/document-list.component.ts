@@ -3,6 +3,7 @@ import { Document } from '../document.model'
 import { DocumentsService } from '../documents.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+
 @Component({
   selector: 'cms-document-list',
   templateUrl: './document-list.component.html',
@@ -18,7 +19,7 @@ export class DocumentListComponent implements OnInit, OnDestroy {
     ) {}
 
   ngOnInit() {
-    this.documents = this.documentService.getDocuments();
+    // this.documents = this.documentService.getDocuments();
     this.subscription = this.documentService.documentListChangedEvent.subscribe(
       (documents: Document[]) =>
       this.documents = documents

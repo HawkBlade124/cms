@@ -2,7 +2,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { Contact } from './contact.model';
 import { MOCKCONTACTS } from './MOCKCONTACTS';
 import { Subject } from 'rxjs';
-
+import { HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http'
 
 @Injectable({
   providedIn: 'root'
@@ -73,17 +73,13 @@ export class ContactService {
     this.contactListChangedEvent.next(this.contacts.slice());
   }
 
-  addContact(newContact: Contact) {
-
-
-    if(!newContact){
+  addContact(contact: Contact) {
+    if(!contact){
       return;
     }
-    this.maxContactId++;
-    // this.addDocument.id = this.maxDocumentId;
-    this.contacts.push(...this.contacts);
-    newContact[this.id] = this.contacts.slice();
-    // this.contactListChangedEvent.next(newContact)
+
+    contact.id = '';
+    const headers = new HttpHeaders({'Content-Type':'application/json'});
 
   }
 
