@@ -6,18 +6,18 @@ import { DocumentsService } from './documents.service';
   selector: 'cms-documents',
   templateUrl: './documents.component.html',
   styleUrls: ['./documents.component.css'],
-  providers: [DocumentsService]
+  providers: []
 })
 export class DocumentsComponent implements OnInit {
 selectedDocument: Document;
   constructor(private documentService: DocumentsService) { }
 
   ngOnInit() {
-    this.documentService.documentSelectedEvent.subscribe(
-      (document: Document) => {
-        this.selectedDocument = document;
-      }
-    );
+    // this.documentService.documentSelectedEvent.subscribe(
+    //   (document: Document) => {
+    //     this.selectedDocument = document;
+    //   }
+    // );
   }
 
 }

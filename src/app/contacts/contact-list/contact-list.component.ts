@@ -3,6 +3,7 @@ import { Contact } from '../contact.model';
 import { ContactService } from '../contact.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { ContactsFilterPipe } from '../contacts-filter.pipe';
 @Component({
   selector: 'cms-contact-list',
   templateUrl: './contact-list.component.html',

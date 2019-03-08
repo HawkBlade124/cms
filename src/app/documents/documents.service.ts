@@ -2,9 +2,9 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 import { Document } from './document.model';
 import { Subject } from 'rxjs';
-import 'rxjs/Rx';
+
 import {HttpClient, HttpHeaders, HttpResponse } from'@angular/common/http'
-import { Http, Response } from '@angular/http'
+// import { Http, Response } from '@angular/http'
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +13,13 @@ import { Http, Response } from '@angular/http'
 export class DocumentsService {
   documentSelectedEvent = new EventEmitter<Document>();
   documentListChangedEvent = new Subject<Document[]>();
-  documentsChanged = new Subject<Document[]>();
+  // documentsChanged = new Subject<Document[]>();
 
   maxDocumentId: number;
   documents: Document[] = [];
   id: string;
 
-  constructor(private http: Http, private documentService: DocumentsService) {
+  constructor(private http: HttpClient, private documentService: DocumentsService) {
       this.documents = MOCKDOCUMENTS;
     this.maxDocumentId = this.getMaxId();
   }
@@ -38,25 +38,14 @@ export class DocumentsService {
 
   getDocuments() {
     this.http.get('https://cmsproject-4163e.firebaseio.com/documents.json')
-    .map(
-      (response: Response) => {
-        const documents: Document[] = response.json();
-        for (let document of documents) {
-          if (!document['documents']) {
-            document['documents'] = [];
-          }
-        }
-        return documents;
-      }
-    )
     .subscribe(
-      (documents: Document[]) => {
-        this.documents = documents;
+      (responseData: Document[]) => {
+        this.documents = responseData;
         this.maxDocumentId = this.getMaxId();
         this.documents.sort();
-        this.documentListChangedEvent.next(this.documents);
+        this.documentListChangedEvent.next(this.documents.slice());
       }
-    );
+    )
   }
   getDocument(index: string) {
     return this.documents[index];

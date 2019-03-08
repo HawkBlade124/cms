@@ -63,7 +63,7 @@ import { ContactsFilterPipe } from './contacts/contacts-filter.pipe';
     HttpModule,
     DndModule.forRoot()
   ],
-  providers: [MessagesService, DocumentsService, ContactService, WindRefService],
+  providers: [WindRefService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
