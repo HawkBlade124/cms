@@ -19,4 +19,6 @@ export class ContactsComponent implements OnInit {
     );
   }
 
+  filteredStatus="";
+
 }

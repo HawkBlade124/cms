@@ -4,6 +4,7 @@ import { MOCKCONTACTS } from './MOCKCONTACTS';
 import { Subject } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http'
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,7 +18,7 @@ export class ContactService {
   maxContactId: number;
 
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.contacts = MOCKCONTACTS;
     this.maxContactId = this.getMaxId();
    }
@@ -80,6 +81,16 @@ export class ContactService {
 
     contact.id = '';
     const headers = new HttpHeaders({'Content-Type':'application/json'});
+    this.http.post<{ message: string, contact:Contact}>('http//localhost:4200/contacts',
+    contact,
+    { headers: headers })
+    .subscribe(
+      (responseData) => {
+        this.contacts.push(responseData.contact);
+
+      }
+    );
+
 
   }
 
