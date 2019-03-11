@@ -11,7 +11,7 @@ import { ContactsFilterPipe } from '../contacts-filter.pipe';
 })
 export class ContactListComponent implements OnInit, OnDestroy {
   contacts: Contact[] = [];
-  term: string;
+
   private subscription: Subscription;
 
   constructor(private contactService: ContactService,
@@ -27,10 +27,6 @@ export class ContactListComponent implements OnInit, OnDestroy {
       }
     );
   }
-  onKeyPress(value:string){
-    this.term = value
-  }
-  filteredStatus = '';
 
   ngOnDestroy() {
     this.subscription.unsubscribe();

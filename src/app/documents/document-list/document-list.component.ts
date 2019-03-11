@@ -24,7 +24,8 @@ export class DocumentListComponent implements OnInit, OnDestroy {
       (documents: Document[]) =>
       this.documents = documents
       );
-  }
+      this.documentService.getDocuments();
+     }
   onNewDocument() {
 
     this.router.navigate(['new'], {relativeTo: this.route});

@@ -2,7 +2,7 @@ import { Injectable, EventEmitter } from '@angular/core';
 import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 import { Document } from './document.model';
 import { Subject } from 'rxjs';
-import 'rxjs/Rx'
+
 import {HttpClient, HttpHeaders, HttpResponse } from'@angular/common/http'
 // import { Http, Response } from '@angular/http'
 
@@ -35,7 +35,7 @@ export class DocumentsService {
   }
 
   getDocuments() {
-    this.http.get('https://cmsproject-4163e.firebaseio.com/documents')
+    this.http.get('https://cmsproject-4163e.firebaseio.com/documents.json')
     .subscribe(
       (responseData: Document[]) => {
         this.documents = responseData;
@@ -61,7 +61,7 @@ export class DocumentsService {
     }
 
     this.documents.splice(pos, 1);
-    this.documentService.setDocuments(this.documents);
+    this.documentService.storeDocuments();
   }
 
   updateDocument(originalDocument: Document, newDocument: Document) {

@@ -9,6 +9,7 @@ import { ContactService } from './contact.service';
 })
 export class ContactsComponent implements OnInit {
   selectedContact: Contact;
+  term: string;
   constructor(private contactService: ContactService) { }
 
   ngOnInit() {
@@ -17,6 +18,9 @@ export class ContactsComponent implements OnInit {
         this.selectedContact = contact;
       }
     );
+  }
+  onKeyPress(value:string){
+    this.term = value
   }
 
   filteredStatus="";
