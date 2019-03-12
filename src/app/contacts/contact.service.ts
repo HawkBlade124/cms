@@ -18,14 +18,25 @@ export class ContactService {
   maxContactId: number;
 
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private contactService: ContactService) {
     this.contacts = MOCKCONTACTS;
     this.maxContactId = this.getMaxId();
    }
+   storeContacts() {
+    return this.http.put('https://cmsproject-4163e.firebaseio.com/contacts.json', this.contactService.getContacts());
+  }
 
-   getContacts(): Contact[]{
-    return this.contacts.slice();
-   }
+   getContacts() {
+    this.http.get('https://cmsproject-4163e.firebaseio.com/contacts.json')
+    .subscribe(
+      (responseData: Contact[]) => {
+        this.contacts = responseData;
+        this.maxContactId = this.getMaxId();
+        this.contacts.sort();
+        this.contactListChangedEvent.next(this.contacts.slice());
+      }
+    )
+  }
 
    getContact(id: string): Contact{
     for(let contact of this.contacts){
@@ -74,24 +85,24 @@ export class ContactService {
     this.contactListChangedEvent.next(this.contacts.slice());
   }
 
-  addContact(contact: Contact) {
-    if(!contact){
-      return;
-    }
+  // addContact(contact: Contact) {
+  //   if(!contact){
+  //     return;
+  //   }
 
-    contact.id = '';
-    const headers = new HttpHeaders({'Content-Type':'application/json'});
-    this.http.post<{ message: string, contact:Contact}>('http//localhost:4200/contacts',
-    contact,
-    { headers: headers })
-    .subscribe(
-      (responseData) => {
-        this.contacts.push(responseData.contact);
+  //   contact.id = '';
+  //   const headers = new HttpHeaders({'Content-Type':'application/json'});
+  //   this.http.post<{ message: string, contact:Contact}>('http//localhost:4200/contacts',
+  //   contact,
+  //   { headers: headers })
+  //   .subscribe(
+  //     (responseData) => {
+  //       this.contacts.push(responseData.contact);
 
-      }
-    );
+  //     }
+  //   );
 
 
-  }
+  // }
 
 }

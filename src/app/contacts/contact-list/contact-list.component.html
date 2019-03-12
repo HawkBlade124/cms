@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-xs-5">
+    <div class="col-xs-12">
         <div class="panel panel-default">
   
   
@@ -25,9 +25,8 @@
               <div class="row">
                 <div class="col-xs-12">
                   <cms-contact-item
-                  *ngFor="let contactEl of contacts; let i = index; | contactsFilter:term"
+                  *ngFor="let contactEl of contacts | contactsFilter:term"
                   [contact]="contactEl"
-                  [index]="i"
                   dnd-draggable [dragEnabled]="true" [dragData]="contact" [dropZones]="['contactGroup']"></cms-contact-item>
                 </div>
               </div>
