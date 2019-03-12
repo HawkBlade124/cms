@@ -80,17 +80,23 @@ export class DocumentsService {
 
   }
 
-  addDocument(newDocument: Document, documentsListClone: Document) {
 
-
-    if(!newDocument){
+  addDocument(document: Document) {
+    if(!document){
       return;
     }
-    this.maxDocumentId++;
-    // this.addDocument.id = this.maxDocumentId;
-    this.documents.push(...this.documents);
-    documentsListClone[this.id] = this.documents.slice();
-    this.documentListChangedEvent.next(documentsListClone[this.id])
+
+    document.id = '';
+    const headers = new HttpHeaders({'Content-Type':'application/json'});
+    this.http.post<{ message: string, document:Document}>('https://cmsproject-4163e.firebaseio.com/documents.json',
+    document,
+    { headers: headers })
+    .subscribe(
+      (responseData) => {
+        this.documents.push(responseData.document);
+
+      }
+    );
   }
 
   storeDocuments() {

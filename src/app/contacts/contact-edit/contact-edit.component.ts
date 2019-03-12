@@ -56,9 +56,9 @@ export class ContactEditComponent implements OnInit {
     if (this.editMode){
       this.contactService.updateContact(this.originalContact, newContact);
     }
-    // else{
-    //   this.contactService.addContact(newContact, null);
-    // }
+    else{
+      this.contactService.addContact(newContact);
+    }
 
     this.editMode = false;
     form.reset();

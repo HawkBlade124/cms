@@ -14,7 +14,7 @@ export class ContactService {
   contactListChangedEvent = new Subject<Contact[]>();
   contactsChanged = new Subject<Contact[]>();
   contacts: Contact[] = [];
-  id: number;
+
   maxContactId: number;
 
 
@@ -85,24 +85,23 @@ export class ContactService {
     this.contactListChangedEvent.next(this.contacts.slice());
   }
 
-  // addContact(contact: Contact) {
-  //   if(!contact){
-  //     return;
-  //   }
+  addContact(contact: Contact) {
+    if(!contact){
+      return;
+    }
 
-  //   contact.id = '';
-  //   const headers = new HttpHeaders({'Content-Type':'application/json'});
-  //   this.http.post<{ message: string, contact:Contact}>('http//localhost:4200/contacts',
-  //   contact,
-  //   { headers: headers })
-  //   .subscribe(
-  //     (responseData) => {
-  //       this.contacts.push(responseData.contact);
+    contact.id = '';
+    const headers = new HttpHeaders({'Content-Type':'application/json'});
+    this.http.post<{ message: string, contact:Contact}>('https://cmsproject-4163e.firebaseio.com/contacts.json',
+    contact,
+    { headers: headers })
+    .subscribe(
+      (responseData) => {
+        this.contacts.push(responseData.contact);
 
-  //     }
-  //   );
-
-
-  // }
+      }
+    );
+    console.log("added!");
+  }
 
 }
