@@ -1,7 +1,8 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
-import { Document } from './document.model';
+//import { Document } from './document.model';
 import { Subject } from 'rxjs';
+import { Document } from './document.model';
 
 import {HttpClient, HttpHeaders, HttpResponse } from'@angular/common/http'
 // import { Http, Response } from '@angular/http'
@@ -39,8 +40,9 @@ export class DocumentsService {
     .subscribe(
       (responseData: Document[]) => {
         this.documents = responseData;
-        this.maxDocumentId = this.getMaxId();
-        this.documents.sort();
+        console.log(this.documents);
+        //this.maxDocumentId = this.getMaxId();
+        this.documents.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
         this.documentListChangedEvent.next(this.documents.slice());
       }
     )
