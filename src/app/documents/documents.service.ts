@@ -1,11 +1,9 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
-//import { Document } from './document.model';
 import { Subject } from 'rxjs';
 import { Document } from './document.model';
-
 import {HttpClient, HttpHeaders, HttpResponse } from'@angular/common/http'
-// import { Http, Response } from '@angular/http'
+
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +17,7 @@ export class DocumentsService {
   id: string;
 
   constructor(private http: HttpClient, private documentService: DocumentsService) {
-      this.documents = MOCKDOCUMENTS;
+    this.documents = MOCKDOCUMENTS;
     this.maxDocumentId = this.getMaxId();
   }
 
@@ -36,16 +34,16 @@ export class DocumentsService {
   }
 
   getDocuments() {
-    this.http.get('https://cmsproject-4163e.firebaseio.com/documents.json')
+    this.http.get<Document[]>('https://cmsproject-4163e.firebaseio.com/documents.json')
     .subscribe(
       (responseData: Document[]) => {
         this.documents = responseData;
-        console.log(this.documents);
         //this.maxDocumentId = this.getMaxId();
         this.documents.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
         this.documentListChangedEvent.next(this.documents.slice());
       }
     )
+
   }
 
   getDocument(index: string) {
