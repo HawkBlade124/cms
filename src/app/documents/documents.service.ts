@@ -37,9 +37,14 @@ export class DocumentsService {
     this.http.get<Document[]>('https://cmsproject-4163e.firebaseio.com/documents.json')
     .subscribe(
       (responseData: Document[]) => {
+        if (responseData && responseData.length > 0) {
         this.documents = responseData;
         //this.maxDocumentId = this.getMaxId();
         this.documents.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+        }
+        else {
+          this.documents = [];
+        }
         this.documentListChangedEvent.next(this.documents.slice());
       }
     )
@@ -86,15 +91,17 @@ export class DocumentsService {
       return;
     }
 
-    document.id = '';
+    this.maxDocumentId++;
+    document.id = this.maxDocumentId.toString();
+    this.documents.push(document);
+
     const headers = new HttpHeaders({'Content-Type':'application/json'});
-    this.http.post<{ message: string, document:Document}>('https://cmsproject-4163e.firebaseio.com/documents.json',
-    document,
+    this.http.put('https://cmsproject-4163e.firebaseio.com/documents.json',
+    this.documents,
     { headers: headers })
     .subscribe(
       (responseData) => {
-        this.documents.push(responseData.document);
-
+        this.documentListChangedEvent.next(this.documents.slice());
       }
     );
   }
