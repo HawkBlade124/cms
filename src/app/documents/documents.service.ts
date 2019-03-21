@@ -56,17 +56,7 @@ export class DocumentsService {
   }
 
   deleteDocument(document: Document) {
-    if (document === null) {
-      return;
-    }
 
-    const pos = this.documents.indexOf(document);
-    if (pos < 0) {
-      return;
-    }
-
-    this.documents.splice(pos, 1);
-    this.documentService.storeDocuments();
   }
 
   updateDocument(originalDocument: Document, newDocument: Document) {
@@ -74,14 +64,6 @@ export class DocumentsService {
       return;
     }
 
-    const pos = this.documents.indexOf(originalDocument);
-
-    if ( pos < 0){
-      return;
-    }
-
-
-    this.documents[pos] = newDocument;
 
   }
 
