@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 import { Document } from './document.model';
 import {HttpClient, HttpHeaders, HttpResponse } from'@angular/common/http'
 import { Response } from '@angular/http';
-import { map } from 'rxjs/operators'
+
 @Injectable({
   providedIn: 'root'
 })
@@ -21,7 +21,6 @@ export class DocumentsService {
     this.maxDocumentId = this.getMaxId();
   }
 
-
   getMaxId(): number{
    var maxId = 0;
     for(let document of this.documents){
@@ -34,7 +33,7 @@ export class DocumentsService {
   }
 
   getDocuments() {
-    this.http.get<Document[]>('https://cmsproject-4163e.firebaseio.com/documents.json')
+    this.http.get<Document[]>('http://localhost:3000/documents')
     .subscribe(
       (responseData: Document[]) => {
         if (responseData && responseData.length > 0) {
@@ -60,10 +59,7 @@ export class DocumentsService {
       return;
     }
 
-    this.http.delete('http://localhost:3000/documents' + document.id).map(
-      (response: Response) =>{
-        return response.json().obj;
-      })
+    this.http.delete('http://localhost:3000/documents' + document.id)
       .subscribe(
         (documents: Document[]) => {
           this.documents = documents;
@@ -83,13 +79,9 @@ export class DocumentsService {
 
     const headers = new HttpHeaders({'Content-Type':'application/json'});
 
-    const strDocument = JSON.stringify(newDocument);
 
-    this.http.patch('https://localhost:3000/documents' + originalDocument.id, strDocument, {headers: headers}).map(
-      (response: Response) =>{
-        response.json().obj;
-      })
-      .subscribe(
+    this.http.patch('https://localhost:3000/documents' + originalDocument.id,  {headers: headers})
+     .subscribe(
         (documents: Document[]) => {
           this.documents = documents;
           this.documentListChangedEvent.next(this.documents.slice());
@@ -103,18 +95,8 @@ export class DocumentsService {
     }
     const headers = new HttpHeaders({'Content-Type':'application/json'});
     document.id = '';
-    const strDocument = JSON.stringify(document);
-
-    // this.maxDocumentId++;
-    // document.id = this.maxDocumentId.toString();
-    // this.documents.push(document);
-
-
-    this.http.put('https://localhost:3000/documents', strDocument, {headers: headers})
-    .map (
-      (response: Response) => {
-        return response.json().obj;
-      })
+    
+    this.http.put('https://localhost:3000/documents', {headers: headers})
       .subscribe(
       (documents:Document[]) => {
         this.documents = documents;
@@ -123,8 +105,8 @@ export class DocumentsService {
     );
   }
 
-  storeDocuments() {
-    return this.http.put('https://cmsproject-4163e.firebaseio.com/documents.json', this.documentService.getDocuments());
-  }
+  // storeDocuments() {
+  //   return this.http.put('http://localhost:3000/document, this.documentService.getDocuments();
+  // }
 
 }

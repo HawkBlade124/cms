@@ -1,10 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-router.get('/', function (request, response, next) {
-  getMessages(response);
-})
-
 router.post('/', function (request, response, next) {
   var maxMessageId = sequenceGenerator.nextId("messages");
 
@@ -51,11 +47,13 @@ router.delete('/:id', function (request, response, next) {
         error: { messageId: request.params.id }
       })
     }
-    deleteMessage(response, message);
+    message.deleteOne({ _id: req.params.id }).then(result => {
+            console.log(result);
+            res.status(200).json({ message: "message deleted!" });
   });
 });
 
-getMessages(request, response)(
+
   router.get("/", (req, res, next) => {
     message.find()
       .then(messages => {
@@ -67,26 +65,26 @@ getMessages(request, response)(
       .catch(error => {
         returnError(res, error);
       })
-  }));
+  })
 
-saveMessage(response, message)(
-  router.post("/:id", (req, res, next) => {
-    message.save()
-      .then(messages => {
-        res.status(200).json({
-          message: "message saved successfully!",
-          messages: messages
-        });
-      })
-      .catch(error => {
-        returnError(res, error);
-      })
-  }));
+// saveMessage(response, message)(
+//   router.post("/:id", (req, res, next) => {
+//     message.save()
+//       .then(messages => {
+//         res.status(200).json({
+//           message: "message saved successfully!",
+//           messages: messages
+//         });
+//       })
+//       .catch(error => {
+//         returnError(res, error);
+//       })
+//   }));
 
-deleteMessage(response, message)(
-  router.delete("/:id", (req, res, next) => {
-    message.deleteOne({ _id: req.params.id }).then(result => {
-      console.log(result);
-      res.status(200).json({ message: "message deleted!" });
-    });
-  }));
+// deleteMessage(response, message)(
+//   router.delete("/:id", (req, res, next) => {
+//     message.deleteOne({ _id: req.params.id }).then(result => {
+//       console.log(result);
+//       res.status(200).json({ message: "message deleted!" });
+//     });
+//   }));
