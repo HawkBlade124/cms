@@ -3,8 +3,8 @@ import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 import { Subject } from 'rxjs';
 import { Document } from './document.model';
 import {HttpClient, HttpHeaders, HttpResponse } from'@angular/common/http'
-
-
+import { Response } from '@angular/http';
+import { map } from 'rxjs/operators'
 @Injectable({
   providedIn: 'root'
 })
@@ -56,7 +56,19 @@ export class DocumentsService {
   }
 
   deleteDocument(document: Document) {
+    if (!document){
+      return;
+    }
 
+    this.http.delete('http://localhost:3000/documents' + document.id).map(
+      (response: Response) =>{
+        return response.json().obj;
+      })
+      .subscribe(
+        (documents: Document[]) => {
+          this.documents = documents;
+          this.documentListChangedEvent.next(this.documents.slice());
+        })
   }
 
   updateDocument(originalDocument: Document, newDocument: Document) {
@@ -64,7 +76,24 @@ export class DocumentsService {
       return;
     }
 
+    const pos = this.documents.indexOf(originalDocument);
+    if (pos < 0){
+      return;
+    }
 
+    const headers = new HttpHeaders({'Content-Type':'application/json'});
+
+    const strDocument = JSON.stringify(newDocument);
+
+    this.http.patch('https://localhost:3000/documents' + originalDocument.id, strDocument, {headers: headers}).map(
+      (response: Response) =>{
+        response.json().obj;
+      })
+      .subscribe(
+        (documents: Document[]) => {
+          this.documents = documents;
+          this.documentListChangedEvent.next(this.documents.slice());
+        })
   }
 
 
@@ -72,17 +101,23 @@ export class DocumentsService {
     if(!document){
       return;
     }
-
-    this.maxDocumentId++;
-    document.id = this.maxDocumentId.toString();
-    this.documents.push(document);
-
     const headers = new HttpHeaders({'Content-Type':'application/json'});
-    this.http.put('https://cmsproject-4163e.firebaseio.com/documents.json',
-    this.documents,
-    { headers: headers })
-    .subscribe(
-      (responseData) => {
+    document.id = '';
+    const strDocument = JSON.stringify(document);
+
+    // this.maxDocumentId++;
+    // document.id = this.maxDocumentId.toString();
+    // this.documents.push(document);
+
+
+    this.http.put('https://localhost:3000/documents', strDocument, {headers: headers})
+    .map (
+      (response: Response) => {
+        return response.json().obj;
+      })
+      .subscribe(
+      (documents:Document[]) => {
+        this.documents = documents;
         this.documentListChangedEvent.next(this.documents.slice());
       }
     );
