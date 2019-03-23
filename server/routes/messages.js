@@ -65,7 +65,7 @@ router.delete('/:id', function (request, response, next) {
       .catch(error => {
         returnError(res, error);
       })
-  })
+  });
 
 // saveMessage(response, message)(
 //   router.post("/:id", (req, res, next) => {
@@ -87,4 +87,7 @@ router.delete('/:id', function (request, response, next) {
 //       console.log(result);
 //       res.status(200).json({ message: "message deleted!" });
 //     });
-//   }));
+//   }))
+});
+
+module.exports = router;

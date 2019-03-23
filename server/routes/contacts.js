@@ -53,11 +53,12 @@ router.delete('/:id', function (request, response, next) {
         error: { contactId: request.params.id }
       })
     }
-    deleteContact(response, contact);
+    contact.deleteOne({ _id: req.params.id }).then(result => {
+      console.log(result);
+      res.status(200).json({ contact: "contact deleted!" });
   });
 });
 
-getContact(request, response)(
   router.get("/", (req, res, next) => {
     contact.find()
       .then(contacts => {
@@ -69,9 +70,9 @@ getContact(request, response)(
       .catch(error => {
         returnError(res, error);
       })
-  }));
+  });
 
-saveContact(response, contact)(
+
   router.post("/:id", (req, res, next) => {
     contact.save()
       .then(contacts => {
@@ -83,12 +84,6 @@ saveContact(response, contact)(
       .catch(error => {
         returnError(res, error);
       })
-  }));
-
-deleteContact(response, contact)(
-  router.delete("/:id", (req, res, next) => {
-    contact.deleteOne({ _id: req.params.id }).then(result => {
-      console.log(result);
-      res.status(200).json({ contact: "contact deleted!" });
-    });
-  }));
+  });
+});
+module.exports = router;

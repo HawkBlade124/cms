@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
-router.get('/', function (request, response, next) {
-  getDocuments(response);
-})
+const Document = require("../model/documents");
 
 router.post('/', function (request, response, next) {
   var maxDocumentId = sequenceGenerator.nextId("documents");
@@ -51,12 +48,14 @@ router.delete('/:id', function (request, response, next) {
         error: { documentId: request.params.id }
       })
     }
-    deleteDocument(response, document);
+    Document.deleteOne({ _id: req.params.id }).then(result => {
+      console.log(result);
+      res.status(200).json({ message: "Document deleted!" });
+    });
   });
 });
 
 
-getDocument(request, response)(
   router.get("/", (req, res, next) => {
     Document.find()
       .then(documents => {
@@ -68,9 +67,8 @@ getDocument(request, response)(
       .catch(error => {
         returnError(res, error);
       })
-  }));
+  });
 
-saveDocument(response, document)(
   router.post("/:id", (req, res, next) => {
     Document.save()
       .then(documents => {
@@ -82,14 +80,7 @@ saveDocument(response, document)(
       .catch(error => {
         returnError(res, error);
       })
-  }));
+  });
 
-deleteDocument(response, document)(
-  router.delete("/:id", (req, res, next) => {
-    Document.deleteOne({ _id: req.params.id }).then(result => {
-      console.log(result);
-      res.status(200).json({ message: "Document deleted!" });
-    });
-  }));
 
 module.exports = router;

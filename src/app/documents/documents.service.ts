@@ -95,7 +95,7 @@ export class DocumentsService {
     }
     const headers = new HttpHeaders({'Content-Type':'application/json'});
     document.id = '';
-    
+
     this.http.put('https://localhost:3000/documents', {headers: headers})
       .subscribe(
       (documents:Document[]) => {

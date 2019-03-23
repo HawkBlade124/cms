@@ -33,7 +33,7 @@ app.use(logger('dev')); // Tell express to use the Morgan logger
 app.use(express.static(path.join(__dirname, 'dist/cms')));
 
 // Tell express to map the default route ("/") to the index route
-app.use('/', index);
+app.use('', index);
 app.use('/messages', messageRoutes);
 app.use('/contacts', contactRoutes);
 app.use('/documents', documentsRoutes);
@@ -53,6 +53,14 @@ app.set('port', port);
 
 // Create HTTP server.
 const server = http.createServer(app);
+
+app.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+  });
 
 // Tell the server to start listening on the provided port
 server.listen(port, function() {console.log("API running on localhost: " + port)});
