@@ -17,7 +17,7 @@ const documentsRoutes = require('./server/routes/documents');
 // establish a connection to the mongo database
 // *** Important *** change yourPort and yourDatabase
 //     to those used by your database
-mongoose.connect('mongodb://localhost:27017/cms');
+mongoose.connect('mongodb://localhost:27017/cms', { useNewUrlParser: true });
 
 var app = express(); // create an instance of express
 
@@ -43,9 +43,21 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/cms/index.html'));
 });
 
-app.use(function(req, res, next){
-  res.render("index");
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader("Access-Control-Allow-Headers",
+  "Origin,X-Requested-With, Content-Type, Accept"
+  );
+  res.setHeader("Access-Control-Allow-Methods",
+  "GET, POST, PATCH, DELETE, PUT, OPTIONS"
+  );
+  next();
 });
+
+app.disable('etag');
+// app.use(function(req, res, next){
+//   res.render("index");
+// });
 
 // Define the port address and tell express to use this port
 const port = process.env.PORT || '3000';
@@ -53,14 +65,6 @@ app.set('port', port);
 
 // Create HTTP server.
 const server = http.createServer(app);
-
-app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  next();
-  });
 
 // Tell the server to start listening on the provided port
 server.listen(port, function() {console.log("API running on localhost: " + port)});

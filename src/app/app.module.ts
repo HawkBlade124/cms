@@ -26,7 +26,8 @@ import { ContactViewComponent } from './contacts/contact-view/contact-view.compo
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DndModule } from 'node_modules/ng2-dnd';
 import { ContactsFilterPipe } from './contacts/contacts-filter.pipe';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @NgModule({
   declarations: [
@@ -64,5 +65,4 @@ import { HttpClientModule } from '@angular/common/http';
   bootstrap: [AppComponent]
 })
 export class AppModule {
-
 }
