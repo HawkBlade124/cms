@@ -18,21 +18,18 @@ export class MessagesService {
     this.messages = MOCKMESSAGES;
   }
 
-  storeMessages() {
-    return this.http.put('https://cmsproject-4163e.firebaseio.com/messages.json', this.messageService.getMessages());
+  getMessages() {
+    this.http.get<{message: string, messages: Message[]}>( 'http://localhost:3000/messages')
+    .subscribe(
+      (messageData) => {
+        this.messages = messageData.messages;
+        this.messageListChangedEvent.next(this.messages.slice());
+      });
+  }
+  getMessage(index: string) {
+    return this.messages[index];
   }
 
-   getMessages() {
-    this.http.get('https://cmsproject-4163e.firebaseio.com/messages.json')
-    .subscribe(
-      (responseData:Message[]) => {
-        this.messages = responseData;
-        this.maxMessageId = this.getMaxId();
-        this.messages.sort();
-        this.messageListChangedEvent.next(this.messages.slice());
-      }
-    )
-  }
   getMaxId(): number{
     var maxId = 0;
      for(let message of this.messages){

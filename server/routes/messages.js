@@ -1,5 +1,20 @@
 const express = require("express");
 const router = express.Router();
+const Message = require("../model/messages");
+
+router.get("/", (req, res, next) => {
+  Message.find()
+    .then(messages => {
+      res.status(200).json({
+        message: 'Messages fetched successfully!',
+        messages: messages
+      });
+    })
+    .catch(error => {
+      returnError(res, error);
+    })
+});
+
 
 router.post('/', function (request, response, next) {
   var maxMessageId = sequenceGenerator.nextId("messages");
@@ -10,8 +25,12 @@ router.post('/', function (request, response, next) {
     msgText: request.body.description,
     sender: request.body.sender
   });
-
-  saveMessage(response, message)
+  message.save().then(createdMessage => {
+    res.status(201).json({
+      message: "Message added successfully",
+      documentId: createdMessage._id
+    })
+  })
 })
 
 router.patch('/:id', function (request, response, next) {
@@ -26,8 +45,6 @@ router.patch('/:id', function (request, response, next) {
     message.subject = request.body.subject;
     message.msgText = request.body.msgText;
     message.sender = request.body.sender;
-
-    saveMessage(response, message);
   });
 });
 
@@ -48,46 +65,11 @@ router.delete('/:id', function (request, response, next) {
       })
     }
     message.deleteOne({ _id: req.params.id }).then(result => {
-            console.log(result);
-            res.status(200).json({ message: "message deleted!" });
+      console.log(result);
+      res.status(200).json({ message: "message deleted!" });
+    });
   });
 });
 
-
-  router.get("/", (req, res, next) => {
-    message.find()
-      .then(messages => {
-        res.status(200).json({
-          message: 'messages fetched successfully!',
-          messages: messages
-        });
-      })
-      .catch(error => {
-        returnError(res, error);
-      })
-  });
-
-// saveMessage(response, message)(
-//   router.post("/:id", (req, res, next) => {
-//     message.save()
-//       .then(messages => {
-//         res.status(200).json({
-//           message: "message saved successfully!",
-//           messages: messages
-//         });
-//       })
-//       .catch(error => {
-//         returnError(res, error);
-//       })
-//   }));
-
-// deleteMessage(response, message)(
-//   router.delete("/:id", (req, res, next) => {
-//     message.deleteOne({ _id: req.params.id }).then(result => {
-//       console.log(result);
-//       res.status(200).json({ message: "message deleted!" });
-//     });
-//   }))
-});
 
 module.exports = router;

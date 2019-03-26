@@ -1,9 +1,19 @@
 const express = require("express");
 const router = express.Router();
+const Contact = require("../model/contacts");
 
-router.get('/', function (request, response, next) {
-  getContacts(response);
-})
+router.get("/", (req, res, next) => {
+  Contact.find()
+    .then(contacts => {
+      res.status(200).json({
+        contact: 'contacts fetched successfully!',
+        contacts: contacts
+      });
+    })
+    .catch(error => {
+      returnError(res, error);
+    })
+});
 
 router.post('/', function (request, response, next) {
   var maxContactId = sequenceGenerator.nextId("contacts");
@@ -16,8 +26,6 @@ router.post('/', function (request, response, next) {
     imageUrl: request.body.imageUrl
 
   });
-
-  saveContact(response, contact)
 })
 
 router.patch('/:id', function (request, response, next) {
@@ -32,8 +40,6 @@ router.patch('/:id', function (request, response, next) {
     contact.subject = request.body.subject;
     contact.msgText = request.body.msgText;
     contact.sender = request.body.sender;
-
-    saveContact(response, contact);
   });
 });
 
@@ -58,19 +64,6 @@ router.delete('/:id', function (request, response, next) {
       res.status(200).json({ contact: "contact deleted!" });
   });
 });
-
-  router.get("/", (req, res, next) => {
-    contact.find()
-      .then(contacts => {
-        res.status(200).json({
-          contact: 'contacts fetched successfully!',
-          contacts: contacts
-        });
-      })
-      .catch(error => {
-        returnError(res, error);
-      })
-  });
 
 
   router.post("/:id", (req, res, next) => {

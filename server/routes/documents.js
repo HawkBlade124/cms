@@ -24,6 +24,12 @@ router.post('/', function (request, response, next) {
     description: request.body.description,
     url: request.body.url
   });
+  document.save().then(createdDocument =>{
+    res.status(201).json({
+      message: "Document added successfully",
+      documentId: createdDocument._id
+    })
+  })
 })
 
 router.put('/:id', function (request, response, next) {

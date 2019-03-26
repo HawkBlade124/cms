@@ -40,7 +40,7 @@ export class DocumentsService {
         this.documents = documentData.documents;
         //this.maxDocumentId = this.getMaxId();
         this.documents.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
-        this.documentListChangedEvent.next(this.documents.slice());  
+        this.documentListChangedEvent.next(this.documents.slice());
       });
   }
 
@@ -53,7 +53,7 @@ export class DocumentsService {
       return;
     }
 
-    this.http.delete('http://localhost:3000/documents' + document.id)
+    this.http.delete('http://localhost:3000/documents/' + document.id)
       .subscribe(
         (documents: Document[]) => {
           this.documents = documents;
@@ -74,7 +74,7 @@ export class DocumentsService {
     const headers = new HttpHeaders({'Content-Type':'application/json'});
       newDocument.id = originalDocument.id;
 
-    this.http.put('http://localhost:3000/documents' + originalDocument.id, newDocument,  {headers: headers})
+    this.http.put('http://localhost:3000/documents/' + originalDocument.id, newDocument,  {headers: headers})
      .subscribe(
         (response: Response) => {
           this.documents[pos] = newDocument;
@@ -87,12 +87,11 @@ export class DocumentsService {
     if(!document){
       return;
     }
-   
-    document.id = '';
-    const headers = new HttpHeaders({'Content-Type':'application/json'});
 
-    this.http.post<{message: string, documents: Document}>('https://localhost:3000/documents', 
-      document,  {headers: headers}).subscribe(
+    document.id = '';
+    const headers = new HttpHeaders({'Content-Type':'text/plain; charset=utf-8'});
+
+    this.http.post<{message: string, documents: Document}>('https://localhost:3000/documents', document,  {headers: headers}).subscribe(
       (responseData) => {
         this.documents.push(responseData.documents);
         this.documentListChangedEvent.next(this.documents.slice());

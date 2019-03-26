@@ -22,29 +22,22 @@ export class ContactService {
     this.contacts = MOCKCONTACTS;
     this.maxContactId = this.getMaxId();
    }
-   storeContacts() {
-    return this.http.put('https://cmsproject-4163e.firebaseio.com/contacts.json', this.contactService.getContacts());
-  }
 
-   getContacts() {
-    this.http.get('https://cmsproject-4163e.firebaseio.com/contacts.json')
+  getContacts() {
+    this.http.get<{message: string, contacts: Contact[]}>( 'http://localhost:3000/contacts')
     .subscribe(
-      (responseData: Contact[]) => {
-        this.contacts = responseData;
-        this.maxContactId = this.getMaxId();
-        this.contacts.sort();
+      (contactData) => {
+        this.contacts = contactData.contacts;
+        //this.maxDocumentId = this.getMaxId();
+        this.contacts.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
         this.contactListChangedEvent.next(this.contacts.slice());
-      }
-    )
+      });
   }
 
-   getContact(id: string): Contact{
-    for(let contact of this.contacts){
-      if(contact.id === id){
-        return contact;
-      }
-    }
-   }
+
+  getContact(index: string) {
+    return this.contacts[index];
+  }
 
    getMaxId(): number{
     var maxId = 0;
@@ -86,22 +79,20 @@ export class ContactService {
   }
 
   addContact(contact: Contact) {
-    if(!contact){
+    if(!Contact){
       return;
     }
 
     contact.id = '';
-    const headers = new HttpHeaders({'Content-Type':'application/json'});
-    this.http.post<{ message: string, contact:Contact}>('https://cmsproject-4163e.firebaseio.com/contacts.json',
-    contact,
-    { headers: headers })
-    .subscribe(
-      (responseData) => {
-        this.contacts.push(responseData.contact);
+    const headers = new HttpHeaders({'Content-Type':'text/plain'});
 
+    this.http.post<{message: string, contacts: Contact}>('https://localhost:3000/contacts',
+      document,  {headers: headers}).subscribe(
+      (responseData) => {
+        this.contacts.push(responseData.contacts);
+        this.contactListChangedEvent.next(this.contacts.slice());
       }
     );
-    console.log("added!");
   }
 
 }
