@@ -4,6 +4,7 @@ import { Subject } from 'rxjs';
 import { Document } from './document.model';
 import {HttpClient, HttpHeaders, HttpResponse } from'@angular/common/http'
 import { Response } from '@angular/http';
+import { stringify } from 'querystring';
 
 @Injectable({
   providedIn: 'root'
@@ -33,21 +34,14 @@ export class DocumentsService {
   }
 
   getDocuments() {
-    this.http.get<Document[]>('http://localhost:3000/documents')
+    this.http.get<{message: string, documents: Document[]}>( 'http://localhost:3000/documents')
     .subscribe(
-      (responseData: Document[]) => {
-        if (responseData && responseData.length > 0) {
-        this.documents = responseData;
+      (documentData) => {
+        this.documents = documentData.documents;
         //this.maxDocumentId = this.getMaxId();
         this.documents.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
-        }
-        else {
-          this.documents = [];
-        }
-        this.documentListChangedEvent.next(this.documents.slice());
-      }
-    )
-
+        this.documentListChangedEvent.next(this.documents.slice());  
+      });
   }
 
   getDocument(index: string) {
@@ -78,12 +72,12 @@ export class DocumentsService {
     }
 
     const headers = new HttpHeaders({'Content-Type':'application/json'});
+      newDocument.id = originalDocument.id;
 
-
-    this.http.patch('https://localhost:3000/documents' + originalDocument.id,  {headers: headers})
+    this.http.put('http://localhost:3000/documents' + originalDocument.id, newDocument,  {headers: headers})
      .subscribe(
-        (documents: Document[]) => {
-          this.documents = documents;
+        (response: Response) => {
+          this.documents[pos] = newDocument;
           this.documentListChangedEvent.next(this.documents.slice());
         })
   }
@@ -93,13 +87,14 @@ export class DocumentsService {
     if(!document){
       return;
     }
-    const headers = new HttpHeaders({'Content-Type':'application/json'});
+   
     document.id = '';
+    const headers = new HttpHeaders({'Content-Type':'application/json'});
 
-    this.http.put('https://localhost:3000/documents', {headers: headers})
-      .subscribe(
-      (documents:Document[]) => {
-        this.documents = documents;
+    this.http.post<{message: string, documents: Document}>('https://localhost:3000/documents', 
+      document,  {headers: headers}).subscribe(
+      (responseData) => {
+        this.documents.push(responseData.documents);
         this.documentListChangedEvent.next(this.documents.slice());
       }
     );

@@ -2,6 +2,19 @@ const express = require("express");
 const router = express.Router();
 const Document = require("../model/documents");
 
+router.get("/", (req, res, next) => {
+  Document.find()
+    .then(documents => {
+      res.status(200).json({
+        message: 'Documents fetched successfully!',
+        documents: documents
+      });
+    })
+    .catch(error => {
+      returnError(res, error);
+    })
+});
+
 router.post('/', function (request, response, next) {
   var maxDocumentId = sequenceGenerator.nextId("documents");
 
@@ -11,11 +24,9 @@ router.post('/', function (request, response, next) {
     description: request.body.description,
     url: request.body.url
   });
-
-  saveDocument(response, document)
 })
 
-router.patch('/:id', function (request, response, next) {
+router.put('/:id', function (request, response, next) {
   Document.findOne({ id: request.params.id }, function (err, document) {
     if (err || !document) {
       return response.status(500).json({
@@ -28,8 +39,10 @@ router.patch('/:id', function (request, response, next) {
     document.description = request.body.description;
     document.url = request.body.url;
 
-    saveDocument(response, document);
+    Document.updateOne({id: req.params.id }, document)
+    .then
   });
+
 });
 
 router.delete('/:id', function (request, response, next) {
@@ -42,6 +55,7 @@ router.delete('/:id', function (request, response, next) {
         error: err
       });
     }
+
     if (!document) {
       return response.status(500).json({
         title: 'No Document Found',
@@ -54,33 +68,6 @@ router.delete('/:id', function (request, response, next) {
     });
   });
 });
-
-
-  router.get("/", (req, res, next) => {
-    Document.find()
-      .then(documents => {
-        res.status(200).json({
-          message: 'Documents fetched successfully!',
-          documents: documents
-        });
-      })
-      .catch(error => {
-        returnError(res, error);
-      })
-  });
-
-  router.post("/:id", (req, res, next) => {
-    Document.save()
-      .then(documents => {
-        res.status(200).json({
-          message: "Document saved successfully!",
-          documents: documents
-        });
-      })
-      .catch(error => {
-        returnError(res, error);
-      })
-  });
 
 
 module.exports = router;
