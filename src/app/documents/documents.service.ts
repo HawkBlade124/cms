@@ -1,10 +1,8 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { MOCKDOCUMENTS } from './MOCKDOCUMENTS';
 import { Subject } from 'rxjs';
 import { Document } from './document.model';
 import {HttpClient, HttpHeaders, HttpResponse } from'@angular/common/http'
 import { Response } from '@angular/http';
-import { stringify } from 'querystring';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +16,6 @@ export class DocumentsService {
   id: string;
 
   constructor(private http: HttpClient, private documentService: DocumentsService) {
-    this.documents = MOCKDOCUMENTS;
     this.maxDocumentId = this.getMaxId();
   }
 

@@ -41,6 +41,7 @@ app.use((req, res, next) => {
   "GET, POST, PATCH, DELETE, PUT, OPTIONS"
   );
   next();
+  add_header('Access-Control-Allow-Origin','http://localhost:4200',always)
 });
 
 // Tell express to use the specified director as the
